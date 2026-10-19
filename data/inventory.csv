@@ -1,0 +1,13 @@
+ingredient,category,current_stock,reorder_level,unit,unit_cost
+Coffee Beans,Beverage,42.0,20.0,kg,18.5
+Black Tea,Beverage,18.0,8.0,kg,13.0
+Cardamom,Spice,5.5,3.0,kg,27.0
+Fresh Ginger,Produce,7.0,4.0,kg,5.5
+Whole Milk,Dairy,48.0,25.0,gallons,4.3
+Oat Milk,Dairy,9.0,12.0,cases,23.0
+Pistachio Syrup,Flavoring,4.0,6.0,bottles,14.5
+Honey,Flavoring,11.0,5.0,jars,10.0
+Pastry Dough,Bakery,16.0,10.0,cases,31.0
+Dates,Bakery,13.0,6.0,kg,12.0
+Paper Cups,Packaging,350.0,500.0,units,0.12
+Cup Lids,Packaging,720.0,500.0,units,0.06
