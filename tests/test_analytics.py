@@ -125,3 +125,4 @@ def test_inventory_contains_twelve_ingredients(test_database):
 
     assert len(inventory) == 12
     assert set(inventory["stock_status"]) == {"In Stock", "Reorder"}
+    assert (inventory["reorder_quantity"] >= 0).all()

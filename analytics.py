@@ -290,7 +290,11 @@ def get_inventory_status(
             unit,
             unit_cost,
             ROUND(current_stock * unit_cost, 2) AS inventory_value,
-            ROUND(reorder_level - current_stock, 2) AS reorder_quantity,
+            CASE
+                WHEN current_stock <= reorder_level
+                    THEN ROUND(reorder_level - current_stock, 2)
+                ELSE 0
+            END AS reorder_quantity,   
             CASE
                 WHEN current_stock <= reorder_level THEN 'Reorder'
                 ELSE 'In Stock'
