@@ -1,5 +1,3 @@
-from datetime import date
-
 import plotly.express as px
 import streamlit as st
 
@@ -232,6 +230,19 @@ if daily_sales.empty:
 
 
 # ---------------------------------------------------------
+# Chart configuration
+# ---------------------------------------------------------
+
+# Keep charts responsive while disabling hover/click overlays that can
+# remain attached to the viewport after the user scrolls.
+chart_config = {
+    "staticPlot": True,
+    "displayModeBar": False,
+    "responsive": True,
+}
+
+
+# ---------------------------------------------------------
 # Dashboard tabs
 # ---------------------------------------------------------
 
@@ -279,7 +290,11 @@ with overview_tab:
             hovermode="x unified",
         )
 
-        st.plotly_chart(daily_chart, use_container_width=True)
+        st.plotly_chart(
+            daily_chart,
+            use_container_width=True,
+            config=chart_config,
+        )
 
     with right_column:
         st.subheader("Revenue by Hour")
@@ -304,7 +319,11 @@ with overview_tab:
             coloraxis_showscale=False,
         )
 
-        st.plotly_chart(hourly_chart, use_container_width=True)
+        st.plotly_chart(
+            hourly_chart,
+            use_container_width=True,
+            config=chart_config,
+        )
 
     st.subheader("Location Performance")
 
@@ -325,7 +344,11 @@ with overview_tab:
     )
 
     location_chart.update_layout(legend_title_text="")
-    st.plotly_chart(location_chart, use_container_width=True)
+    st.plotly_chart(
+        location_chart,
+        use_container_width=True,
+        config=chart_config,
+    )
 
 
 with products_tab:
@@ -347,31 +370,33 @@ with products_tab:
         },
     )
 
-    st.plotly_chart(product_chart, use_container_width=True)
+    st.plotly_chart(
+        product_chart,
+        use_container_width=True,
+        config=chart_config,
+    )
 
     st.subheader("Product Details")
 
-    st.dataframe(
-        product_performance,
-        use_container_width=True,
-        hide_index=True,
-        column_config={
+    product_display = product_performance.rename(
+        columns={
             "product": "Product",
             "category": "Category",
-            "quantity_sold": st.column_config.NumberColumn(
-                "Quantity Sold",
-                format="%d",
-            ),
-            "revenue": st.column_config.NumberColumn(
-                "Revenue",
-                format="$%.2f",
-            ),
-            "gross_profit": st.column_config.NumberColumn(
-                "Gross Profit",
-                format="$%.2f",
-            ),
-        },
-    )
+            "quantity_sold": "Quantity Sold",
+            "revenue": "Revenue",
+            "gross_profit": "Gross Profit",
+        }
+    ).copy()
+
+    product_display["Revenue"] = product_display[
+        "Revenue"
+    ].map(lambda value: f"${value:,.2f}")
+
+    product_display["Gross Profit"] = product_display[
+        "Gross Profit"
+    ].map(lambda value: f"${value:,.2f}")
+
+    st.table(product_display)
 
 
 with inventory_tab:
@@ -402,28 +427,49 @@ with inventory_tab:
     else:
         st.success("All ingredients currently have sufficient stock.")
 
-    st.dataframe(
-        inventory,
-        use_container_width=True,
-        hide_index=True,
-        column_config={
+    inventory_display = inventory[
+        [
+            "ingredient",
+            "category",
+            "current_stock",
+            "reorder_level",
+            "unit",
+            "inventory_value",
+            "reorder_quantity",
+            "stock_status",
+        ]
+    ].copy()
+
+    inventory_display = inventory_display.rename(
+        columns={
             "ingredient": "Ingredient",
             "category": "Category",
             "current_stock": "Current Stock",
             "reorder_level": "Reorder Level",
             "unit": "Unit",
-            "unit_cost": st.column_config.NumberColumn(
-                "Unit Cost",
-                format="$%.2f",
-            ),
-            "inventory_value": st.column_config.NumberColumn(
-                "Inventory Value",
-                format="$%.2f",
-            ),
+            "inventory_value": "Inventory Value",
             "reorder_quantity": "Reorder Quantity",
             "stock_status": "Status",
-        },
+        }
     )
+
+    inventory_display["Current Stock"] = inventory_display[
+        "Current Stock"
+    ].map(lambda value: f"{value:g}")
+
+    inventory_display["Reorder Level"] = inventory_display[
+        "Reorder Level"
+    ].map(lambda value: f"{value:g}")
+
+    inventory_display["Inventory Value"] = inventory_display[
+        "Inventory Value"
+    ].map(lambda value: f"${value:,.2f}")
+
+    inventory_display["Reorder Quantity"] = inventory_display[
+        "Reorder Quantity"
+    ].map(lambda value: f"{value:g}")
+
+    st.table(inventory_display)
 
 
 # ---------------------------------------------------------
