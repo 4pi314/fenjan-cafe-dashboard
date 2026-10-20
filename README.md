@@ -4,7 +4,12 @@ An interactive business intelligence dashboard for monitoring café sales, profi
 
 The project uses synthetic café data and demonstrates a complete analytics workflow using Python, SQL, Pandas, Plotly, Streamlit, automated testing, and Git.
 
+
 > All names, transactions, financial figures, and inventory records in this project are fictional and generated for demonstration purposes.
+
+## Live Demo
+
+[Open the Fenjan Café Operations Dashboard](https://fenjan-cafe-dashboard.streamlit.app)
 
 ## Features
 
@@ -39,6 +44,15 @@ The dashboard includes three main sections:
    - Reorder thresholds
    - Inventory values
    - Low-stock alerts
+
+
+### Sales Overview
+
+![Fenjan Café sales overview](docs/dashboard-overview.png)
+
+### Inventory Management
+
+![Fenjan Café inventory dashboard](docs/dashboard-inventory.png)
 
 ## Technology Stack
 
